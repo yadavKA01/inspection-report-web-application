@@ -3,7 +3,7 @@ services:
     name: inspection-report-api
     runtime: python
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
+    buildCommand: git lfs install && git lfs pull && pip install --upgrade pip && pip install -r requirements.txt
     startCommand: uvicorn serve_balloon:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
