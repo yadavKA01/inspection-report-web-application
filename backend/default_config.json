@@ -1,0 +1,186 @@
+{
+    "AWS": {
+        "ACCESS_KEY_ID": "",
+        "SECRET_ACCESS_KEY": "",
+        "REGION": "ap-south-1"
+    },
+    "GEMINI": {
+        "GEMINI_25_PRO_API_KEY": "",
+        "USE_FOR_CHAT": false,
+        "CHAT_MODEL": "gemini-2.5-pro"
+    },
+    "GROQ": {
+        "API_KEY": "",
+        "CHAT_MODEL": "llama-3.1-8b-instant",
+        "VISION_MODEL": "llama-3.2-11b-vision-preview",
+        "USE_FOR_CHAT": false,
+        "USE_FOR_VISION": false
+    },
+    "OPENAI": {
+        "openai_api_key": "",
+        "CHAT_MODEL": "gpt-4o-mini",
+        "VISION_MODEL": "gpt-4o-mini",
+        "USE_FOR_CHAT": true,
+        "USE_FOR_VISION": true
+    },
+    "GCP": {
+        "PROJECT_ID": "",
+        "LOCATION": "global",
+        "SCOPES": [
+            "https://www.googleapis.com/auth/cloud-platform"
+        ],
+        "GCP_SERVICE_ACCOUNT": {
+            "type": "service_account",
+            "project_id": "",
+            "private_key_id": "",
+            "private_key": "",
+            "client_email": "",
+            "client_id": "",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "",
+            "universe_domain": "googleapis.com"
+        }
+    },
+    "DATABASE": {
+        "TYPE": "mongodb",
+        "URI": "mongodb+srv://smorxai_db_user:Pd35sty8NfRHIogj@cluster0.4ooslpz.mongodb.net/?appName=Cluster0"
+    },
+    "BROKER": {
+        "TYPE": "redis",
+        "ADDRESS": "localhost",
+        "PORT": 6390,
+        "BROKER_DB": 7,
+        "BACKEND_DB": 7,
+        "STREAMING_QUEUE_DB": 15
+    },
+    "SECURITY": {
+        "DATABASE_NAME": "ai_engine",
+        "COLLECTION_NAME": "access_control"
+    },
+    "EMAIL": {
+        "RESEND_API_KEY": "",
+        "FROM_EMAIL": "onboarding@resend.dev",
+        "APP_NAME": "Auto Ballooning",
+        "PROVIDER": "resend"
+    },
+    "CERTIFICATE_EXTRACTION": {
+        "DATABASE_NAME": "certificate_extraction",
+        "COLLECTION_NAME": "task",
+        "BUCKET_NAME": "certificate-extraction",
+        "MAX_PAGES_LIMIT": 3,
+        "TASK_HISTORY_LIMIT": 100,
+        "API_KEYS_EMAILS": "",
+        "FROM_EMAILS": "",
+        "TO_EMAILS": []
+    },
+    "AGENT": {
+        "DATABASE_NAME": "intelligent_agent",
+        "AGENT_COLLECTION_NAME": "agents",
+        "KB_COLLECTION_NAME": "knowledgebase",
+        "FILE_CONVERSION_COLLECTION": "file_details",
+        "RESPONSE_COLLECTION": "response_collection",
+        "SQL_DIRECTORY": "Resources/sql/intelligentagent",
+        "EMBEDDING_MODEL": "cohere.embed-multilingual-v3",
+        "LLM_MODEL": "anthropic.claude-3-sonnet-20240229-v1:0",
+        "PROMPT": "You are a helpfull assistant give the answer in structured way. Give proper answer to user question. Dont answer from any other sources only anser from tool based sources.Give the most accurate answer",
+        "CHAT_HISTORY_LIMIT": 5,
+        "IMAGE_DIRECTORY": "Resources/images/agent/extracted_images"
+    },
+    "IMDS_REPORT_EXTRACTION": {
+        "DATABASE_NAME": "IMDS_extraction",
+        "COLLECTION_NAME": "task",
+        "MAX_PAGES_DIVISION": 5,
+        "TASK_TIMEOUT": 60
+    },
+    "VDA_REPORT_EXTRACTION": {
+        "DATABASE_NAME": "vda_report_extraction",
+        "COLLECTION_NAME": "task",
+        "BUCKET_NAME": "vda-certificate-extraction",
+        "TASK_HISTORY_LIMIT": 100,
+        "TASK_TIMEOUT": 60
+    },
+    "WARRANTY_FORECASTING": {
+        "DATABASE_NAME": "warranty_forecasting",
+        "COLLECTION_NAME": "task",
+        "GRAPH_DIRECTORY": ".Temp/Graphs",
+        "REPORT_DIRECTORY": "Resources/pdf",
+        "MODEL_PARAMETERS": {
+            "Fast": {
+                "epoch": 15
+            },
+            "Optimistic": {
+                "epoch": 75
+            },
+            "Logical": {
+                "epoch": 150
+            }
+        }
+    },
+    "PPAP_AGENT": {
+        "TEMP_FOLDER": ".Temp",
+        "LLM_MODEL": "apac.anthropic.claude-3-5-sonnet-20240620-v1:0"
+    },
+    "SCORE_CARD": {
+        "DATABASE_NAME": "scorecard",
+        "COLLECTION_NAME": "analysescorecard",
+        "PDF_DIRECTORY": ".Temp/Scorecard",
+        "TASK_HISTORY_LIMIT": 30
+    },
+    "AUTOBALLONING": {
+        "DATABASE_NAME": "auto_balloon",
+        "BASE_DIRECTORY": ".Temp/auto_balloon",
+        "RECORDS": "records"
+    },
+    "AUDIT_MANAGEMENT": {
+        "FRAME_INTERVAL_SECONDS": 10,
+        "DATABASE_NAME": "audit_management",
+        "COLLECTION_NAME": "AuditScores",
+        "TASK_HISTORY_LIMIT": 30
+    },
+    "APQP": {
+        "DATABASE_NAME": "apqp",
+        "COLLECTION_NAME": "resposne",
+        "PROMPT_COLLECTION": "prompt"
+    },
+    "LLMS": {
+        "DATABASE_NAME": "LLMS",
+        "AGENT_COLLECTION_NAME": "agents",
+        "KB_COLLECTION_NAME": "knowledgebase",
+        "FILE_CONVERSION_COLLECTION": "file_details",
+        "RESPONSE_COLLECTION": "response_collection",
+        "SQL_DIRECTORY": "Resources/sql/llms",
+        "EMBEDDING_MODEL": "cohere.embed-multilingual-v3",
+        "LLM_MODEL": "anthropic.claude-3-sonnet-20240229-v1:0",
+        "PROMPT": "You are a helpfull assistant give the answer in structured way. Give proper answer to user question. Dont answer from any other sources only anser from tool based sources.Give the most accurate answer",
+        "CHAT_HISTORY_LIMIT": 5,
+        "IMAGE_DIRECTORY": "Resources/images/llms/extracted_images"
+    },
+    "DMS": {
+        "DATABASE_NAME": "DMS",
+        "PROMPT_COLLECTION_NAME": "prompt",
+        "FILE_TRANSLATION_COLLECTION": "translated_files",
+        "AGENT_COLLECTION_NAME": "agents",
+        "KB_COLLECTION_NAME": "knowledgebase",
+        "FILE_CONVERSION_COLLECTION": "file_details",
+        "LLM_MODEL": "anthropic.claude-3-sonnet-20240229-v1:0",
+        "RESPONSE_COLLECTION": "response_collection",
+        "DOCUMENT_DIRECTORY": ".Temp/DMS",
+        "SQL_DIRECTORY": "Resources/sql/dms",
+        "EMBEDDING_MODEL": "cohere.embed-multilingual-v3",
+        "TASK_HISTORY_LIMIT": 50,
+        "PROMPT": "You are a helpfull assistant give the answer in structured way. Give proper answer to user question. Dont answer from any other sources only answer from tool based sources.Give the most accurate answer",
+        "CHAT_HISTORY_LIMIT": 5,
+        "IMAGE_DIRECTORY": ".Temp/DMS",
+        "FONTS_FOLDER": "Resources/fonts"
+    },
+    "NC_MANAGEMENT": {
+        "DATABASE_NAME": "non-confirmity",
+        "PROMPT_COLLECTION": "prompt",
+        "RESPONSE_COLLECTION": "ncResponse",
+        "TEMP_FOLDER": ".Temp/NC",
+        "TASK_LIMIT": 30,
+        "EMBEDDING_MODEL": "cohere.embed-multilingual-v3"
+    }
+}
