@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Inspection report — Auto Ballooning &amp; inspection report Software System</title>
+  <link rel="stylesheet" href="/assets/style.css?v=24" />
+  <link rel="stylesheet" href="/assets/inspection_report.css?v=4" />
+</head>
+<body class="ir-body">
+  <h1 class="ir-sr-only">Auto Ballooning &amp; inspection report Software System — Inspection report</h1>
+  <header class="ir-top">
+    <a class="ir-brand" href="/app" aria-label="SmorX.ai home">
+      <img src="/assets/smorx-logo.png" alt="SmorX.ai" />
+    </a>
+    <div class="ir-top-actions ir-nav-pills">
+      <span class="btn-inspection btn-inspection-active" aria-current="page">Inspection report</span>
+      <a href="/app" class="btn-dashboard" id="irDashboardBtn">Go to Dashboard</a>
+    </div>
+  </header>
+
+  <main class="ir-main" id="irMain">
+    <p id="irEmpty" class="ir-empty" hidden>
+      No ballooning data found. Run auto ballooning first, then open Inspection report.
+      <a href="/app">Go to Dashboard</a>
+    </p>
+
+    <div id="irContent" hidden>
+      <section class="ir-meta">
+        <div class="ir-meta-grid">
+          <label><span class="ir-meta-label"><span class="ir-meta-num">1.</span> Part Number</span><input type="text" id="irPartNumber" /></label>
+          <label><span class="ir-meta-label"><span class="ir-meta-num">2.</span> Part Name</span><input type="text" id="irPartName" /></label>
+          <label><span class="ir-meta-label"><span class="ir-meta-num">3.</span> Revision</span><input type="text" id="irRevision" /></label>
+          <label><span class="ir-meta-label"><span class="ir-meta-num">4.</span> Material</span><input type="text" id="irMaterial" /></label>
+          <label><span class="ir-meta-label"><span class="ir-meta-num">5.</span> Mass</span><input type="text" id="irMass" /></label>
+          <label><span class="ir-meta-label"><span class="ir-meta-num">6.</span> Finish Treatment</span><input type="text" id="irFinish" /></label>
+        </div>
+      </section>
+
+      <section class="ir-table-section">
+        <div class="ir-table-outer">
+          <button type="button" class="ir-scroll-btn ir-scroll-left" id="irScrollLeft" aria-label="Scroll left">‹</button>
+          <div class="ir-table-wrap" id="irTableWrap">
+            <table class="ir-table" id="irTable">
+              <thead id="irThead"></thead>
+              <tbody id="irTbody"></tbody>
+            </table>
+          </div>
+          <button type="button" class="ir-scroll-btn ir-scroll-right" id="irScrollRight" aria-label="Scroll right">›</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/assets/inspection_report.js?v=3"></script>
+</body>
+</html>

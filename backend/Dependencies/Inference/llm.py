@@ -356,7 +356,9 @@ class LLM():
     '''
     def ChatWithImage(self, imageBytes=None, prompt:str=None, maxTokens=500, temperature=1, topP=0.999, modelId=SONNET_4_MODEL_ID):
         try:
-            if self._openaiConfig.get("USE_FOR_VISION") and self._openaiApiKey:
+            if self._openaiApiKey and (
+                self._openaiConfig.get("USE_FOR_VISION") or self._openaiConfig.get("USE_FOR_CHAT")
+            ):
                 if imageBytes is None:
                     return {"status": "FAILED", "message": "No image uploaded"}
                 use_prompt = (

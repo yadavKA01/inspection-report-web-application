@@ -6,6 +6,13 @@ from pymongo import MongoClient
 
 Client = None
 
+# Fail fast instead of hanging when Atlas IP whitelist / network is wrong (default can be ~30s).
+_MONGO_TIMEOUT_KW = {
+    "serverSelectionTimeoutMS": 8_000,
+    "connectTimeoutMS": 8_000,
+    "socketTimeoutMS": 45_000,
+}
+
 
 """
 Establish a global MongoDB connection.
@@ -23,11 +30,13 @@ def Connect(dbAddress=None, dbPort=None, uri=None):
     if Client is None:
         try:
             if uri:
-                Client = MongoClient(uri)
+                Client = MongoClient(uri, **_MONGO_TIMEOUT_KW)
             elif dbAddress is not None and dbPort is not None:
-                Client = MongoClient(f"mongodb://{dbAddress}:{dbPort}")
+                Client = MongoClient(
+                    f"mongodb://{dbAddress}:{dbPort}", **_MONGO_TIMEOUT_KW
+                )
             else:
-                Client = MongoClient("mongodb://localhost:27017/")
+                Client = MongoClient("mongodb://localhost:27017/", **_MONGO_TIMEOUT_KW)
             print("MongoDB connection established.")
         except Exception as e:
             print(f"Error connecting to MongoDB: {str(e)}")
@@ -50,3 +59,17 @@ def GetCollection(dbName, collectionName):
         raise ValueError("Database connection is not established. Call connect() first.")
     database = Client[dbName]
     return database[collectionName]
+
+
+def ping() -> bool:
+    """Return True if the server responds to a MongoDB ping (useful for Atlas diagnostics)."""
+    global Client
+    if Client is None:
+        print("[mongodb] ping: no client — Connect() failed or was never called. Check DATABASE.URI / MONGODB_URI.")
+        return False
+    try:
+        Client.admin.command("ping")
+        return True
+    except Exception as exc:
+        print(f"[mongodb] ping failed: {type(exc).__name__}: {exc}")
+        return False

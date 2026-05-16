@@ -1,3 +1,5 @@
+
+
 import base64
 import io
 import math
@@ -1252,7 +1254,8 @@ def RunInference(weights, image_path, imgsz=1024, conf_thres=0.5, iou_thres=0.45
             bbox = [int(boxes[i][0]), int(boxes[i][1]), int(boxes[i][2]), int(boxes[i][3])]
             bbox[0] = max(0, bbox[0] - bbox_padding)  # x1
             bbox[1] = max(0, bbox[1] - bbox_padding)  # y1
-            bbox[2] = min(orig_w, bbox[2] + bbox_padding)  # x
+            bbox[2] = min(orig_w, bbox[2] + bbox_padding)  # x2
+            bbox[3] = min(orig_h, bbox[3] + bbox_padding)  # y2 (was missing — caused bad crops)
             class_id = class_ids[i]
             confidence = confidences[i]
             class_name = class_names[class_id]
@@ -1289,12 +1292,13 @@ def yolo_raw_detections_to_annotation_list(raw_dets):
     """
     Build DrawingAnnotations-shaped entries from RunInference() output when the
     multi-view crop pipeline produced no rows (common on large PNGs).
+    Balloon ids follow reading order: top→bottom, then left→right (bbox center).
     """
+    dets = [d for d in (raw_dets or []) if d.get("bbox") and len(d["bbox"]) >= 4]
+    dets = sort_detections_tblr(dets)
     out = []
-    for idx, d in enumerate(raw_dets or [], start=1):
+    for idx, d in enumerate(dets, start=1):
         bbox = d.get("bbox")
-        if not bbox or len(bbox) < 4:
-            continue
         cls_name = d.get("class_name") or "Dimensions"
         x1, y1, x2, y2 = bbox[0], bbox[1], bbox[2], bbox[3]
         out.append(
@@ -1455,12 +1459,9 @@ def sort_detections_gridwise(detections, image_shape, grid_rows=4, grid_cols=6):
 
 def sort_detections_tblr(detections):
     """
-    Sort detections purely top-to-bottom and left-to-right
-    based on the center point (cx, cy) of each bounding box.
+    Sort detections top-to-bottom, then left-to-right using bbox top-left (y1, x1).
 
-    Priority:
-        1. cy  -> top appears first
-        2. cx  -> left appears first
+    Reading order on drawings: upper rows first; within a row, left to right.
     """
 
     if not detections or len(detections) == 1:
@@ -1470,17 +1471,14 @@ def sort_detections_tblr(detections):
 
     for det in detections:
         x1, y1, x2, y2 = det["bbox"]
-        cx = (x1 + x2) / 2
-        cy = (y1 + y2) / 2
 
         enriched.append({
             "detection": det,
-            "cx": cx,
-            "cy": cy
+            "y1": float(y1),
+            "x1": float(x1),
         })
 
-    # Sort by top-to-bottom first, then left-to-right
-    enriched.sort(key=lambda d: (d["cy"], d["cx"]))
+    enriched.sort(key=lambda d: (d["y1"], d["x1"]))
 
     return [d["detection"] for d in enriched]
 
@@ -1676,15 +1674,8 @@ def ProcessMultipleViews(views_directory, coordinate_mappings_path, weights,
                 }
                 transformed_detections.append(transformed_detection)
             
-            # NOW sort within this view by transformed coordinates (top to bottom, left to right)
-            transformed_detections = cluster_and_sort_detections(
-                transformed_detections, 
-                image_shape=original_img.shape[:2]
-            )
-
-            # transformed_detections = sort_detections_tblr(
-            #     transformed_detections,
-            # )
+            # Sort by reading order: top→bottom, then left→right (bbox center).
+            transformed_detections = sort_detections_tblr(transformed_detections)
             
             # ========== NEW: IoU-based filtering against previous views ==========
             Logger.debug(f"\n--- IoU Filtering for {view_name} ---")
@@ -1808,8 +1799,7 @@ def ProcessMultipleViews(views_directory, coordinate_mappings_path, weights,
         
         Logger.debug(f"Found {len(non_view_detections)} detections outside view regions")
         
-        # Sort non-view detections by position
-        non_view_detections.sort(key=lambda d: (d["bbox"][1], d["bbox"][0]))
+        non_view_detections = sort_detections_tblr(non_view_detections)
         
         target_classes = YOLO_TARGET_CLASSES_FOR_CROPS
 
@@ -2640,12 +2630,17 @@ def run_drawing_yolo_detection(
                     "ascii"
                 )
 
+        # Full-resolution bboxes (same pixel space as the on-disk infer image / PdfToPreprocessedImage).
+        # `detections` may be scaled for preview when long_side > PREVIEW_IMAGE_MAX_SIDE — server-side
+        # crops and OCR must use detections_full or bbox crops will be wrong (often blank/white).
         return (
             {
                 "width": disp_w,
                 "height": disp_h,
                 "count": len(disp_dets),
                 "detections": disp_dets,
+                "detections_full": out,
+                "infer_image_path": infer_path,
                 "input_kind": kind,
                 "preview_image_base64": preview_b64,
             },

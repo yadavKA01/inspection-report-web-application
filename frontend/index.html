@@ -1,91 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <title>Auto Ballooning &amp; inspection report Software System</title>
-  <link rel="stylesheet" href="/assets/style.css?v=26" />
-</head>
-<body>
-  <header class="top">
-    <div class="top-left">
-      <a class="brand" href="/" aria-label="SmorX.ai home">
-        <img class="brand-logo" src="/assets/smorx-logo.png" alt="SmorX.ai" />
-      </a>
-    </div>
-    <h1 class="top-title">Auto Ballooning &amp; inspection report Software System</h1>
-    <div class="top-right top-actions header-nav-pills">
-      <button type="button" id="inspectionReport" class="btn-inspection" disabled>Inspection report</button>
-      <a id="adminLink" class="btn-secondary" href="/admin" style="display:none">Admin</a>
-      <button type="button" id="logoutBtn" class="btn-secondary">Logout</button>
-    </div>
-  </header>
-
-  <main class="app-main">
-  <section class="toolbar">
-    <div class="toolbar-inner">
-      <label class="file-wrap">
-        <span>Upload Engineering drawing</span>
-        <input id="file" type="file" accept=".pdf,image/*" />
-      </label>
-      <button type="button" id="runBtn" class="primary">Run auto ballooning</button>
-      <button type="button" id="downloadExcel" class="btn-outline" disabled>Download Excel</button>
-      <span id="status" class="status"></span>
-    </div>
-  </section>
-
-  <div class="steps">
-    <section class="step step-card">
-      <div class="step-head">
-        <h2>1 · Input file</h2>
-        <button type="button" id="downloadInput" class="btn-outline btn-sm" disabled>Download</button>
-      </div>
-      <div id="panelInput" class="panel panel-drawing"><p class="placeholder">No file yet.</p></div>
-    </section>
-    <section class="step step-card">
-      <div class="step-head">
-        <h2>2 · Auto Ballooning</h2>
-        <div class="balloon-toolbar">
-          <button type="button" class="btn-tool" disabled>Create</button>
-          <button type="button" class="btn-tool" disabled>Edit</button>
-          <button type="button" class="btn-tool" disabled>Delete</button>
-          <button type="button" id="balloonSave" class="btn-tool btn-tool-save" disabled>Save</button>
-          <button type="button" class="btn-tool btn-tool-icon" disabled title="Info">i</button>
-          <button type="button" id="downloadBalloon" class="btn-tool" disabled>Download</button>
-        </div>
-      </div>
-      <div id="panelBalloon" class="panel panel-drawing"><p class="placeholder">Run auto ballooning to see balloons here.</p></div>
-    </section>
-  </div>
-
-  <section class="results-block">
-    <h2>Detected details</h2>
-    <div class="table-wrap">
-      <table id="resultTable">
-        <thead>
-          <tr>
-            <th>Balloon #</th>
-            <th>Class</th>
-            <th>Detected text</th>
-            <th>Confidence</th>
-          </tr>
-        </thead>
-        <tbody id="resultBody">
-          <tr><td colspan="4">Run auto ballooning to see extracted values.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="results-block">
-    <h2>JSON response</h2>
-    <div class="table-wrap">
-      <pre id="jsonOut">{}</pre>
-    </div>
-  </section>
-  </main>
-
-  <script src="/assets/app.js?v=15"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmorX.ai — Auto Ballooning</title>
+    <link rel="icon" type="image/jpeg" href="/smorx-logo.jpg" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

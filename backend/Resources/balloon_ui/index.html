@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>Auto Ballooning Software</title>
+  <link rel="stylesheet" href="/assets/style.css?v=23" />
+</head>
+<body>
+  <header class="top">
+    <div class="top-left">
+      <a class="brand" href="/" aria-label="SmorX.ai home">
+        <img class="brand-logo" src="/assets/smorx-logo.jpg" alt="SmorX.ai" width="180" height="48" />
+      </a>
+    </div>
+    <h1 class="top-title">Auto Ballooning Software</h1>
+    <div class="top-right top-actions">
+      <a id="adminLink" class="btn-secondary" href="/admin" style="display:none">Admin</a>
+      <button type="button" id="inspectionReport" class="btn-inspection" disabled>Inspection report</button>
+      <button type="button" id="dashboardBtn" class="btn-secondary">Go to Dashboard</button>
+    </div>
+  </header>
+
+  <section class="toolbar">
+    <label class="file-wrap">
+      <span>Upload Engineering drawing</span>
+      <input id="file" type="file" accept=".pdf,image/*" />
+    </label>
+    <button type="button" id="runBtn" class="primary">Run auto ballooning</button>
+    <button type="button" id="downloadExcel" class="btn-secondary" disabled>Download Excel</button>
+    <span id="status" class="status"></span>
+  </section>
+
+  <div class="steps">
+    <section class="step">
+      <div class="step-head">
+        <h2>1 · Input file</h2>
+        <button type="button" id="downloadInput" class="btn-secondary" disabled>Download</button>
+      </div>
+      <div id="panelInput" class="panel"><p class="placeholder">No file yet.</p></div>
+    </section>
+    <section class="step">
+      <div class="step-head step-head-wide">
+        <h2>2 · Auto Ballooning</h2>
+        <div class="balloon-modes" aria-label="Balloon tools">
+          <button type="button" id="btnModeCreate" class="btn-secondary mode-btn" disabled title="Draw a rectangle on the drawing to add a manual detection and balloon">Create</button>
+          <button type="button" id="btnModeEdit" class="btn-secondary mode-btn" disabled title="Drag balloon circles to reposition">Edit</button>
+          <button type="button" id="btnModeDelete" class="btn-secondary mode-btn mode-delete" disabled title="Click a balloon circle to remove it (then Save)">Delete</button>
+          <button type="button" id="btnModeSave" class="btn-secondary mode-btn mode-save" disabled title="Save balloon positions and manual regions to JSON and table">Save</button>
+          <div class="balloon-menu-wrap">
+            <button type="button" id="btnBalloonMenu" class="btn-secondary btn-icon" disabled title="Quick table — edit balloons, then save to sync below" aria-expanded="false" aria-controls="balloonQuickPanel">⋮</button>
+            <div id="balloonQuickPanel" class="balloon-quick-panel" hidden>
+              <div class="balloon-quick-panel-head" title="Drag to move this window">
+                <strong>Quick edit</strong>
+                <button type="button" id="btnCloseQuickPanel" class="btn-close-quick" aria-label="Close">×</button>
+              </div>
+              <p class="balloon-quick-hint">Drag the title bar to move. Edit rows, then <strong>Save to main table</strong> — values sync to Detected details below.</p>
+              <div class="balloon-quick-table-wrap">
+                <table class="quick-balloon-table" id="quickBalloonTable">
+                  <thead>
+                    <tr>
+                      <th>Balloon No.</th>
+                      <th>Classes</th>
+                      <th>Nominal value</th>
+                      <th>Tolerance</th>
+                      <th>others</th>
+                      <th>Crop</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="quickBalloonBody"></tbody>
+                </table>
+              </div>
+              <div class="balloon-quick-actions">
+                <button type="button" id="btnQuickSave" class="btn-secondary mode-save">Save to main table</button>
+              </div>
+            </div>
+          </div>
+          <button type="button" id="downloadBalloon" class="btn-secondary" disabled>Download</button>
+        </div>
+      </div>
+      <div id="panelBalloon" class="panel"><p class="placeholder">Run auto ballooning to see balloons here.</p></div>
+    </section>
+  </div>
+
+  <section class="results-block">
+    <h2>Detected details</h2>
+    <div class="table-wrap">
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th>Balloon No.</th>
+            <th>Classes</th>
+            <th>Nominal value</th>
+            <th>Tolerance</th>
+            <th>others</th>
+          </tr>
+        </thead>
+        <tbody id="resultBody">
+          <tr><td colspan="5">Run auto ballooning to see extracted values.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Raw API JSON is no longer shown here (not end-user friendly). Data still lives in memory for Save / Download. -->
+
+  <div id="quickCropViewModal" class="quick-crop-modal" hidden aria-modal="true" role="dialog">
+    <div class="quick-crop-modal-backdrop" id="quickCropModalBackdrop"></div>
+    <div class="quick-crop-modal-dialog">
+      <div class="quick-crop-modal-head">
+        <span>Bounding box crop</span>
+        <button type="button" class="btn-close-quick" id="btnCloseCropModal" aria-label="Close">×</button>
+      </div>
+      <div class="quick-crop-modal-body">
+        <img id="quickCropViewImg" alt="Balloon crop preview" />
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/app.js?v=28"></script>
+</body>
+</html>

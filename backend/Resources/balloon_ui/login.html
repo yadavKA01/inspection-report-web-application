@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Auto Ballooning</title>
+  <link rel="stylesheet" href="/assets/style.css?v=10" />
+  <link rel="stylesheet" href="/assets/auth.css?v=6" />
+</head>
+<body class="auth-body">
+  <div class="auth-card" id="card">
+
+    <!-- ── Brand ── -->
+    <div class="login-brand">
+      <img src="/assets/smorx-logo.png" alt="SmorX.ai" />
+      <h1>Auto Ballooning</h1>
+    </div>
+
+    <!-- ── Notification banner ── -->
+    <div id="msg" class="auth-msg"></div>
+
+    <!-- ── First screen: Log in vs Create account ── -->
+    <div id="panelChoice" class="auth-choice">
+      <p class="auth-choice-label">Welcome — choose an option</p>
+      <div class="auth-choice-buttons">
+        <button type="button" id="btnTabLogin" class="choice-tab choice-tab-active">Log in</button>
+        <button type="button" id="btnTabRegister" class="choice-tab">Create account</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         PANEL 1: Login
+         ════════════════════════════════════════ -->
+    <div id="panelLogin">
+      <label for="email">Email</label>
+      <input type="email" id="email" autocomplete="username"
+             placeholder="you@gmail.com" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password"
+             placeholder="••••••••" />
+
+      <div class="auth-actions">
+        <button type="button" id="btnLogin" class="primary">Log in</button>
+      </div>
+
+      <!-- Shown after a 404 "account not found" response -->
+      <div id="noAccountHint" class="no-account-hint" style="display:none">
+        <p>No account for this email?</p>
+        <button type="button" id="btnShowRegister" class="btn-secondary">
+          Create account
+        </button>
+      </div>
+
+      <p class="auth-small">Trial access lasts 3 days from your first successful login. After that, sign-in requires an active subscription.</p>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         PANEL 2: Create Account
+         ════════════════════════════════════════ -->
+    <div id="panelRegister" style="display:none">
+      <p class="auth-hint">
+        Set a password below to sign up without email, or leave passwords blank to receive a temporary password by email.
+      </p>
+
+      <label for="regFirstname">First name</label>
+      <input type="text" id="regFirstname" autocomplete="given-name"
+             placeholder="Jane" />
+
+      <label for="regLastname">Last name</label>
+      <input type="text" id="regLastname" autocomplete="family-name"
+             placeholder="Doe" />
+
+      <label for="regEmail">Email</label>
+      <input type="email" id="regEmail" autocomplete="username"
+             placeholder="you@gmail.com" />
+
+      <label for="regPassword">Password <span class="auth-optional">(optional if using email)</span></label>
+      <input type="password" id="regPassword" autocomplete="new-password"
+             placeholder="Leave blank for email temp password" />
+
+      <label for="regPassword2">Confirm password</label>
+      <input type="password" id="regPassword2" autocomplete="new-password"
+             placeholder="Must match if you set a password" />
+
+      <p class="auth-small auth-left">If you set a password: at least 8 characters, upper and lower case, a number, and a special character (!@#$…).</p>
+
+      <div class="auth-actions">
+        <button type="button" id="btnRegister" class="primary">Create account</button>
+        <button type="button" id="btnBackToLogin" class="btn-link">← Back to login</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         PANEL 3: Check your email (success)
+         ════════════════════════════════════════ -->
+    <div id="panelSuccess" style="display:none">
+      <div class="success-icon">✓</div>
+      <h2 class="success-heading">Check your email</h2>
+      <p class="auth-hint" id="successMsg"></p>
+      <div class="auth-actions">
+        <button type="button" id="btnGoLogin" class="primary">Back to login</button>
+      </div>
+    </div>
+
+  </div><!-- /.auth-card -->
+
+  <script src="/assets/login.js?v=9"></script>
+</body>
+</html>

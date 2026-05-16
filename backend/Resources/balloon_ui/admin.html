@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Auto Ballooning</title>
+  <link rel="stylesheet" href="/assets/style.css?v=10" />
+  <link rel="stylesheet" href="/assets/auth.css?v=1" />
+</head>
+<body class="auth-body">
+  <div class="auth-card wide">
+    <h1>Admin</h1>
+    <p class="auth-hint">Mark users as paid, or reset a user password if email / temp password failed.</p>
+    <div id="msg" class="auth-msg"></div>
+    <div class="table-wrap">
+      <table id="userTable">
+        <thead>
+          <tr><th>Email</th><th>Role</th><th>Paid</th><th>Trial started</th></tr>
+        </thead>
+        <tbody id="userBody"></tbody>
+      </table>
+    </div>
+    <div class="admin-row">
+      <input type="email" id="paidEmail" placeholder="user@gmail.com" />
+      <button type="button" id="btnPaid" class="primary">Mark paid</button>
+    </div>
+    <h2 style="margin:1.25rem 0 0.5rem;font-size:1rem;">Reset user password</h2>
+    <p class="auth-hint" style="margin-top:0">Clears temporary-password mode so they can log in with the new password.</p>
+    <div class="admin-row" style="flex-direction:column;align-items:stretch">
+      <input type="email" id="resetEmail" placeholder="user@gmail.com" autocomplete="username" />
+      <input type="password" id="resetPwd" placeholder="New password" autocomplete="new-password" />
+      <input type="password" id="resetPwd2" placeholder="Confirm new password" autocomplete="new-password" />
+      <button type="button" id="btnResetPwd" class="primary">Reset password</button>
+    </div>
+    <p><a href="/app">← Back to app</a></p>
+  </div>
+  <script src="/assets/admin.js?v=2"></script>
+</body>
+</html>
