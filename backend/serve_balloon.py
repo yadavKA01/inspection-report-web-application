@@ -99,11 +99,16 @@ else:
         "Set DATABASE.URI (or ADDRESS/PORT) in config to enable database features."
     )
 
-from AutoBallooning.tasks import (  # noqa: E402
-    _vision_llm_message,
-    get_yolo_weights_path_loaded,
-    run_drawing_yolo_detection,
-)
+# Heavy deps (torch, ultralytics) — import lazily so Render binds $PORT before loading YOLO.
+_tasks_mod = None
+
+
+def _tasks():
+    global _tasks_mod
+    if _tasks_mod is None:
+        from AutoBallooning import tasks as _tasks_mod
+    return _tasks_mod
+
 
 _UPLOAD_ROOT = _BACKEND_DIR / ".Temp" / "balloon_ui_uploads"
 _UPLOAD_ROOT.mkdir(parents=True, exist_ok=True)
@@ -162,6 +167,9 @@ app.include_router(session_router) # /activities/save, /activities, /activities/
 @app.on_event("startup")
 def _startup():
     """Initialise PostgreSQL tables and seed super admin on first run."""
+    if not os.environ.get("DATABASE_URL", "").strip():
+        print("[auth] Skipping PostgreSQL init — set DATABASE_URL for login/admin.")
+        return
     try:
         init_db()
         print("[auth] PostgreSQL tables ready.")
@@ -360,7 +368,7 @@ def _extract_one_crop_bgr_llm(bgr: np.ndarray, class_name: str) -> dict[str, str
             "- Use empty strings where nothing applies."
         )
         try:
-            val = _vision_llm_message(
+            val = _tasks()._vision_llm_message(
                 buf.tobytes(), prompt, max_tokens=400, temperature=0.0, top_p=1.0
             )
             parsed = _parse_extraction_json(val or "")
@@ -471,7 +479,7 @@ def _extract_detection_text_llm(image_path: str, detections: list) -> list:
                 "- Use empty strings where nothing applies."
             )
             try:
-                val = _vision_llm_message(
+                val = _tasks()._vision_llm_message(
                     buf.tobytes(), prompt, max_tokens=400, temperature=0.0, top_p=1.0
                 )
                 parsed = _parse_extraction_json(val or "")
@@ -582,7 +590,7 @@ async def api_detect(
         with dest.open("wb") as buf:
             shutil.copyfileobj(file.file, buf)
 
-        payload, err = run_drawing_yolo_detection(str(dest), str(work), file.filename)
+        payload, err = _tasks().run_drawing_yolo_detection(str(dest), str(work), file.filename)
         if err:
             return JSONResponse(status_code=400, content={"ok": False, "error": err})
 
@@ -594,7 +602,7 @@ async def api_detect(
         # Use full-resolution bboxes for crops (detections may be scaled for preview only).
         dets_for_crop = payload.get("detections_full") or dets
         payload["balloon_items"] = _extract_detection_text_llm(extract_path, dets_for_crop)
-        payload["weights_path"] = get_yolo_weights_path_loaded()
+        payload["weights_path"] = _tasks().get_yolo_weights_path_loaded()
 
         # ── Activity log (tenant-scoped) ──────────────────────────────────
         _log_activity(

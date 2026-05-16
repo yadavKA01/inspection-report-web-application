@@ -4,7 +4,7 @@ services:
     runtime: python
     rootDir: backend
     buildCommand: git lfs install && git lfs pull && pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: uvicorn serve_balloon:app --host 0.0.0.0 --port $PORT
+    startCommand: bash start.sh
     envVars:
       - key: PYTHON_VERSION
         value: "3.10.11"
