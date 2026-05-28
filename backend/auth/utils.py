@@ -186,14 +186,16 @@ def send_otp_email(to_email: str, name: str, otp: str, purpose: str = "signup") 
 
 
 def find_user_by_login(db, login: str):
-    """Find user by email or username."""
+    """Find user by email or username (email match is case-insensitive)."""
+    from sqlalchemy import func
+
     from auth.models import User
 
     key = login.strip().lower()
-    user = db.query(User).filter(User.email == key).first()
+    user = db.query(User).filter(func.lower(User.email) == key).first()
     if user:
         return user
-    return db.query(User).filter(User.username == key).first()
+    return db.query(User).filter(func.lower(User.username) == key).first()
 
 
 def send_temp_password_email(

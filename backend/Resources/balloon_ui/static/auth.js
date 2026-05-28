@@ -164,6 +164,27 @@
     });
   }
 
+  function attachPasswordToggle(inputEl, btnEl) {
+    if (!inputEl || !btnEl) return;
+    btnEl.addEventListener("click", function () {
+      var show = inputEl.type === "password";
+      inputEl.type = show ? "text" : "password";
+      btnEl.textContent = show ? "Hide" : "Show";
+      btnEl.setAttribute("aria-pressed", show ? "true" : "false");
+      btnEl.setAttribute("aria-label", show ? "Hide password" : "Show password");
+      btnEl.title = show ? "Hide password" : "Show password";
+    });
+  }
+
+  function initPasswordToggles(root) {
+    var scope = root || document;
+    scope.querySelectorAll(".password-toggle").forEach(function (btn) {
+      var id = btn.getAttribute("data-target") || "password";
+      var input = scope.querySelector("#" + id) || document.getElementById(id);
+      attachPasswordToggle(input, btn);
+    });
+  }
+
   global.BalloonAuth = {
     TOKEN_KEY: TOKEN_KEY,
     getToken: getToken,
@@ -177,5 +198,7 @@
     requirePageAccess: requirePageAccess,
     requireAppAccess: requireAppAccess,
     applyPermissionUi: applyPermissionUi,
+    attachPasswordToggle: attachPasswordToggle,
+    initPasswordToggles: initPasswordToggles,
   };
 })(window);

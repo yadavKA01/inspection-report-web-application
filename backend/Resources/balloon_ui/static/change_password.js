@@ -81,4 +81,6 @@
   confirmPasswordEl.addEventListener("keydown", function (e) {
     if (e.key === "Enter") btnSubmit.click();
   });
+
+  BalloonAuth.initPasswordToggles(document);
 })();

@@ -23,7 +23,10 @@
       <input type="text" id="loginId" autocomplete="username" placeholder="you@company.com or username" />
 
       <label for="password">Password</label>
-      <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" />
+      <div class="password-field">
+        <input type="password" id="password" autocomplete="current-password" placeholder="••••••••" />
+        <button type="button" class="password-toggle" id="btnTogglePassword" aria-pressed="false" aria-label="Show password" title="Show password">Show</button>
+      </div>
 
       <div class="auth-actions">
         <button type="button" id="btnLogin" class="primary">Log in</button>
@@ -32,7 +35,7 @@
     </div>
   </div>
 
-  <script src="/assets/auth.js?v=3"></script>
-  <script src="/assets/login.js?v=15"></script>
+  <script src="/assets/auth.js?v=4"></script>
+  <script src="/assets/login.js?v=16"></script>
 </body>
 </html>

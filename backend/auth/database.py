@@ -109,6 +109,7 @@ def init_db() -> None:
     _migrate_schema()
     _seed_super_admin()
     try:
+        _repair_super_admin_password_hash_if_needed()
         _sync_super_admin_password_from_env()
     except Exception as exc:
         print(f"[auth] Super admin password sync skipped: {exc}")
@@ -191,6 +192,47 @@ def _seed_super_admin() -> None:
     except Exception as exc:
         db.rollback()
         print(f"[auth] WARNING: Could not seed super admin: {exc}")
+    finally:
+        db.close()
+
+
+def _bcrypt_hash_valid(hashed: str) -> bool:
+    h = (hashed or "").strip()
+    return len(h) >= 50 and h.startswith(("$2a$", "$2b$", "$2y$"))
+
+
+def _repair_super_admin_password_hash_if_needed() -> None:
+    """
+    Fix Neon/manual rows where password_hash is plain text (not bcrypt).
+    Runs when SUPER_ADMIN_PASSWORD is set — no reset flag required.
+    """
+    raw_password = os.environ.get("SUPER_ADMIN_PASSWORD", "").strip()
+    if not raw_password:
+        return
+
+    from auth.models import RoleEnum, User
+    from auth.utils import hash_password
+
+    email = os.environ.get("SUPER_ADMIN_EMAIL", "admin@smorx.ai").strip().lower()
+    db = SessionLocal()
+    try:
+        admin = db.query(User).filter_by(role=RoleEnum.super_admin).first()
+        if not admin:
+            admin = db.query(User).filter(User.email == email).first()
+        if not admin or _bcrypt_hash_valid(admin.password_hash or ""):
+            return
+        admin.password_hash = hash_password(raw_password)
+        admin.is_temp_password = False
+        admin.email_verified = True
+        admin.is_active = True
+        admin.email = email
+        db.commit()
+        print(
+            f"[auth] Repaired invalid password_hash for {admin.email} from SUPER_ADMIN_PASSWORD."
+        )
+    except Exception as exc:
+        db.rollback()
+        print(f"[auth] WARNING: Super admin password repair failed: {exc}")
     finally:
         db.close()
 

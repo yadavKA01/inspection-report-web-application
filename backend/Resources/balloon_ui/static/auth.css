@@ -112,6 +112,39 @@ body.auth-body {
   font-size: 1.05rem;
   border-radius: 10px;
 }
+.password-field {
+  position: relative;
+  display: block;
+  margin-top: 0.25rem;
+}
+.password-field input[type="password"],
+.password-field input[type="text"] {
+  width: 100%;
+  padding-right: 4.25rem;
+  box-sizing: border-box;
+}
+.password-toggle {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 0.35rem 0.55rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #7eb8ff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.password-toggle:hover,
+.password-toggle:focus {
+  color: #a8d4ff;
+  outline: none;
+  text-decoration: underline;
+}
 .auth-card.auth-card-login .auth-actions {
   margin-top: 1.5rem;
 }

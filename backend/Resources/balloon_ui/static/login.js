@@ -81,4 +81,9 @@
   document.getElementById("password").addEventListener("keydown", function (e) {
     if (e.key === "Enter") document.getElementById("btnLogin").click();
   });
+
+  BalloonAuth.attachPasswordToggle(
+    document.getElementById("password"),
+    document.getElementById("btnTogglePassword")
+  );
 })();
