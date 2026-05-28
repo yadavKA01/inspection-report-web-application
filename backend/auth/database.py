@@ -108,7 +108,10 @@ def init_db() -> None:
     Base.metadata.create_all(bind=engine)
     _migrate_schema()
     _seed_super_admin()
-    _sync_super_admin_password_from_env()
+    try:
+        _sync_super_admin_password_from_env()
+    except Exception as exc:
+        print(f"[auth] Super admin password sync skipped: {exc}")
 
 
 def _migrate_schema() -> None:
