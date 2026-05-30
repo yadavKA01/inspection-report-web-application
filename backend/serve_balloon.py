@@ -30,6 +30,7 @@ import os
 import re
 import shutil
 import sys
+import threading
 import uuid
 from datetime import datetime, timezone
 from io import BytesIO
@@ -209,11 +210,18 @@ def _startup():
             f"(engine={_ocr_engine()}, max={_max_crop_ocr_count()}). "
             "Set BALLOON_RENDER_SAFE=0 for full Claude pipeline."
         )
-        try:
-            _tasks().get_yolo_model()
-            print("[detect] YOLO model preloaded.")
-        except Exception as exc:
-            print(f"[detect] YOLO preload skipped: {exc}")
+        # NOTE: never load the YOLO model here — startup must finish fast so
+        # uvicorn binds the port before Render's port-scan timeout. The model
+        # is lazy-loaded on the first /api/v1/detect request instead.
+        if os.environ.get("BALLOON_PRELOAD_YOLO", "").strip().lower() in ("1", "true", "yes", "on"):
+            def _bg_preload():
+                try:
+                    _tasks().get_yolo_model()
+                    print("[detect] YOLO model preloaded (background).")
+                except Exception as exc:
+                    print(f"[detect] YOLO preload skipped: {exc}")
+
+            threading.Thread(target=_bg_preload, daemon=True).start()
 
 _STATIC_DIR = _UI_DIR / "static"
 if _STATIC_DIR.is_dir():
